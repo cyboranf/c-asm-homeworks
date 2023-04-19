@@ -24,7 +24,7 @@ getaddr:
 
 ;        esp -> [format][eax][edx][ret]
 
-         call [ebx+3*4]  ; printf('iloczyn = %u\n', eax);
+         call [ebx+3*4]  ; printf('iloczyn = %d\n', eax);
          add esp, 3*4    ; esp = esp + 12
 
 ;        esp -> [ret]
