@@ -5,7 +5,7 @@ extern   _scanf
 extern   _exit
 
 section .data
-    format db "%d", 0  ; format string for printf
+    format db "%d", 0          ; format string for printf
     a resw 1                   ; allocate 2 bytes for integer variable a
     message db 'a = ', 0x, 0
     message2 db 'a = %d', 0x, 0
