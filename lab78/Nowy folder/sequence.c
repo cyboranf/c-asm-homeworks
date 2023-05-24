@@ -159,6 +159,66 @@ która funkcja ma mniejsz¹ z³o¿onoœæ obliczeniow¹ seq1 czy seq2
 odp     seq1
 */
 
+int seq3(int n) {
+    if (n <= 2) {
+        return n + 2;
+    } else {
+        return 0.5 * seq3(n-1) + 2 * seq3(n-2);
+    }
+}
+/*
+- dokonaj analizy wywo³ania seq3(4)
+
+* seq1(4) = 12
+  return 0.5 * seq2(3) + 2 * seq (2) =  0.5 * seq2(3) + 2 * seq3(2) = 4 + 8 = 12
+
+* seq2(3) = 8
+  return 0.5 * seq3(2) + 2 * seq (1) = 0.5 * seq3(2) + 2 * seq4(1) = 2 + 6 = 8
+
+* seq3(2) = 4
+  return n + 2 = 2 + 2 = 4
+
+* seq4(1) = 3
+  return n + 2 = 1  + 2 = 3
+
+ */
+/*
+Analiza do seq3
+*/
+/*
+Graf do seq3
+ s(1)   s(2)
+  \    /   |
+   s(3)    |
+  /   \    |
+s(2)  s(1) |
+  \   /   /
+   s(3)  /
+  /    \/
+s(2)  s(3)
+  \   /
+   s(4)
+ */
+
+void indent(int n) {
+    for (int i = 0; i < n; i++) {
+        printf("  ");
+    }
+}
+
+void SequenceTree(int n, int depth) {
+    indent(depth);
+    printf("seq3(%d)\n", n);
+
+    if (n > 2) {
+        SequenceTree(n-1, depth+1);
+        SequenceTree(n-2, depth+1);
+    }
+
+    indent(depth);
+    printf("return seq3(%d) = %d\n", n, seq3(n));
+}
+
 int main() {
     printf("sequence.c\n\n");
     
@@ -166,6 +226,10 @@ int main() {
     
     printf("seq1(%d) = %d\n", n, seq1(n));
     printf("seq2(%d) = %d\n", n, seq2(n));
-     
+    printf("seq3(%d) = %d\n", n, seq3(n));
+
+    printf("SequenceTree for seq3(%d):\n", n);
+    SequenceTree(n, 0);
+
     return 0;
 }
