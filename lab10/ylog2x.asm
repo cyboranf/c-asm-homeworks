@@ -1,8 +1,10 @@
          [bits 32]
 
+;        FYL2X       st(1) := st(1)*log2[st(0)] i zdejmij
+
 ;        esp -> [ret]  ; ret - adres powrotu do asmloader
 
-x        equ __?float64?__(256.0)
+x        equ__?float64?__(256.0)
 
          sub esp, 2*4  ; esp = esp - 8 ; make room for double type result
 
@@ -10,34 +12,26 @@ x        equ __?float64?__(256.0)
 
          call getaddr  ; get the runtime address of format
 
-format   db "log2 = %f", 0xA, 0
+format   db "sqrt = %f", 0xA, 0
 length   equ $ - format
-
-addr_y   dq 1.0  ; define quad word
-addr_x   dq x    ; define quad word
+addr_x   dd x                    ; define double word
 
 getaddr:
 
 ;        esp -> [format][ ][ ][ret]
 
-;        FYL2X       st(1) := st(1)*log2[st(0)] i zdejmij
-
          finit  ; fpu init
 
-;        st = []
-
          mov eax, [esp]   ; eax = *(int*)esp = format
-         add eax, length  ; eax = eax + length = format + length = addr_y
-         
-         fld qword [eax]  ; *(double*)eax = *(double*)addr_y = 1 -> st ; fpu load floating-point
+         add eax, length  ; eax = eax + length = format + length = addr_x
 
-;        st = [st0] = [1]  ; fpu stack
+         fild dword [eax]  ; *(int*)eax = *(int*)addr_x = x -> st  ; fpu load integer
 
-         fld qword [eax+8]  ; *(double*)eax = *(double*)addr_x = x -> st ; fpu load floating-point
+;        st = [st0] = [x]  ; fpu stack
 
-;        st = [st0, st1] = [x, 1]  ; fpu stack
+         fsqrt  ; [st0] => [sqrt(st0)] = [sqrt(x)]
 
-         fyl2x 
+;        st = [st0] = [sqrt(x)]  ; fpu stack
 
 ;                       +4
 ;        esp -> [format][ ][ ][ret]
